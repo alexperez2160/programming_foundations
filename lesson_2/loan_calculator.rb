@@ -15,35 +15,67 @@
 ## specify if it's in years or months
 ## convert to month if not in months 
 ## plug into the formula 
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
 
-puts "Hello, what's your name?"
+prompt("Hello, what's your name?")
 
 name= gets.chomp 
 
-puts "Hello #{name}. Let me help you calculate your monthly loan payment"
+prompt("Hello #{name}. Let me help you calculate your monthly loan payment")
 
 loop do 
-puts "What is the APR of the loan?"
+prompt("What is the APR of the loan?")
+prompt("(Example: 5 for 5% or 2.5 for 2.5%)")
+apr=''
 
-apr= gets.chomp.to_f
+loop do
+    apr= gets.chomp
+    if apr.empty? || apr.to_f<0
+        prompt("Enter a valid number")
+    else 
+        break
+    end
+end 
 
-quoted_rate=(apr*0.01)/12
+quoted_rate=(apr.to_f*0.01)/12
+prompt("The quoted rate is #{quoted_rate}")
 
-puts "The monthly interest rate is #{quoted_rate}"
+prompt("What is the loan amount?")
 
-puts "What is the loan amount?"
+amount=''
 
-amount= gets.chomp.to_f
-puts "The loan amount is $#{amount}"
+loop do 
+    amount= gets.chomp
+        if amount.to_f<0 || amount.empty?
+            prompt("Please enter a correct loan amount")
+        else 
+            break
+        end
+end
+    
+prompt("The loan amount is $#{amount}")
+
 
 puts "What is the loan duration in years?"
 
-duration_years=gets.chomp.to_i
-duration_months= duration_years*12 
+duration_years=''
+loop do 
+    
+duration_years=gets.chomp
+    if duration_years.empty? || duration_years.to_i<0
+        prompt("Please enter a valid number")
+    else
+        break
+    end
+end
+
+duration_months= duration_years.to_i*12 
 
 puts "The loan duration is #{duration_months} months."
 
-monthly_payment = (amount*(quoted_rate*((1 + quoted_rate)**duration_months)))/(((1 + quoted_rate)**duration_months) - 1)
+monthly_payment = (amount.to_f*(quoted_rate*((1 + quoted_rate)**duration_months)))/(((1 + quoted_rate)**duration_months) - 1)
 
 puts "Your monthly payment will be #{monthly_payment}."
 
