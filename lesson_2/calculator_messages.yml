@@ -1,0 +1,19 @@
+# calculator_messages.yml
+
+en:
+
+    welcome: "Welcome to Calculator! Enter your name:"
+    valid_name: "Make sure to end a valid name."
+    first_number: "What is the first number?"
+    number_is: "The number is"
+    second_number: "What is the second number?"
+    invalid_number: "That looks like an invalid number..."
+sp: 
+
+    welcome: "Bienvenido a la calculadora! Entre su nombre:"
+    valid_name: "Asegúrese de entrar un nombre válido."
+    first_number: "Cual es el primer numero?"
+    number_is: "El numero es"
+    second_number: "Cual es el segunod numero?"
+    invalid_number: "El numero no parece valido..."
+# ... rest of file omitted for brevity
