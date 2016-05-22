@@ -25,9 +25,9 @@ puts "Hello #{name}. Let me help you calculate your monthly loan payment"
 loop do 
 puts "What is the APR of the loan?"
 
-apr_years= gets.chomp.to_f
+apr= gets.chomp.to_f
 
-quoted_rate=(apr_years*0.01)/12
+quoted_rate=(apr*0.01)/12
 
 puts "The monthly interest rate is #{quoted_rate}"
 
@@ -38,14 +38,14 @@ puts "The loan amount is $#{amount}"
 
 puts "What is the loan duration in years?"
 
-duration=gets.chomp.to_i
-duration= duration*12 
+duration_years=gets.chomp.to_i
+duration_months= duration_years*12 
 
-puts "The loan duration is #{duration} months."
+puts "The loan duration is #{duration_months} months."
 
-payment = (amount*(quoted_rate*((1 + quoted_rate)**duration)))/(((1 + quoted_rate)**duration) - 1)
+monthly_payment = (amount*(quoted_rate*((1 + quoted_rate)**duration_months)))/(((1 + quoted_rate)**duration_months) - 1)
 
-puts "Your monthly payment will be #{payment}."
+puts "Your monthly payment will be #{monthly_payment}."
 
 puts "Do you have any other loans whose monthly payment you'd like to calculate?"
 
@@ -54,4 +54,4 @@ answer= gets.chomp
    break unless answer.downcase().start_with?('y')
         
 end 
-"Thank you for using the loan calculator"
+puts "Thank you for using the loan calculator"
