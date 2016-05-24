@@ -1,4 +1,4 @@
-VALID_CHOICES = %w(rock paper scissors)
+VALID_CHOICES = %w(rock paper scissors lizard spock)
 
 def prompt(message)
   puts "=> #{message}"
@@ -7,7 +7,12 @@ end
 def win?(first, second)
   (first == 'rock' && second== 'scissors') ||
   (first == 'paper' && second == 'rock') ||
-  (first == 'scissors' && second == 'paper')
+  (first == 'scissors' && second == 'paper') ||
+  (first == 'lizard' && second == 'spock') ||
+  (first == 'spock' && second == 'spock') ||
+  (first == 'scissors' && second == 'lizard') ||
+  (first == 'paper' && second == 'spock' ) ||
+  (first == 'spock' && second == 'rock')
 end
 
 def display_results(player, computer)
@@ -15,7 +20,13 @@ def display_results(player, computer)
       prompt("You won!")
     elsif (player == 'rock' && computer == 'paper') ||
       (player == 'paper' && computer == 'scissors') ||
-      (player == 'scissors' && computer == 'rock')
+      (player == 'scissors' && computer == 'rock') ||
+      (player == 'lizard' && computer == 'rock') ||
+      (player == 'scissors' && computer == 'spock') ||
+      (player == 'lizard' && computer == 'scissors') ||
+      (player == 'spock' && computer == 'paper') ||
+      (player == 'rock' && computer == 'spock') ||
+      (player == 'paper' && computer == 'lizard')
       prompt("You lose!")
     else
       prompt("It's a tie")
