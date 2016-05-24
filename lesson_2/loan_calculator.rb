@@ -80,12 +80,12 @@ monthly_payment = (amount.to_f * (quoted_rate * ((1 + quoted_rate)**duration_mon
 
 puts "Your monthly payment will be #{monthly_payment}."
 
-puts "Do you have any other loans 
+puts "Do you have any other loans
 whose monthly payment you'd like to calculate?"
 
 answer = gets.chomp
 
   break unless answer.downcase().start_with?('y')
-        
-end 
+
+end
 puts "Thank you for using the loan calculator"
