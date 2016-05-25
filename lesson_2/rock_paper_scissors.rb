@@ -17,15 +17,15 @@ def win?(first, second)
 end
 
 def lose?(player, computer)
-      (player == 'rock' && computer == 'paper') ||
-      (player == 'paper' && computer == 'scissors') ||
-      (player == 'scissors' && computer == 'rock') ||
-      (player == 'lizard' && computer == 'rock') ||
-      (player == 'scissors' && computer == 'spock') ||
-      (player == 'lizard' && computer == 'scissors') ||
-      (player == 'spock' && computer == 'paper') ||
-      (player == 'rock' && computer == 'spock') ||
-      (player == 'paper' && computer == 'lizard')
+  (player == 'rock' && computer == 'paper') ||
+  (player == 'paper' && computer == 'scissors') ||
+  (player == 'scissors' && computer == 'rock') ||
+  (player == 'lizard' && computer == 'rock') ||
+  (player == 'scissors' && computer == 'spock') ||
+  (player == 'lizard' && computer == 'scissors') ||
+  (player == 'spock' && computer == 'paper') ||
+  (player == 'rock' && computer == 'spock') ||
+  (player == 'paper' && computer == 'lizard')
 end
 
 loop do
@@ -42,17 +42,17 @@ computer_score = 0
     choice = gets.chomp
 
     case choice 
-      when 's'
-        choice = 'scissors'
-      when 'r'
+    when 's'
+      choice = 'scissors'
+    when 'r'
         choice = 'rock'
-      when 'p'
+    when 'p'
         choice = 'paper'
-      when 'sp'
+    when 'sp'
         choice = 'spock'
-      when 'l' 
+    when 'l' 
         choice = 'lizard'
-      else 
+    else 
         prompt("Please enter a valid abbreviation.")
     end
   
@@ -98,7 +98,7 @@ prompt("computer: #{computer_score}")
     prompt("It's a tie")
     break
   end 
-  end 
+  end
 
 
 prompt("Do you want to play again?")
