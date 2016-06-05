@@ -130,16 +130,16 @@ loop do
     loop do 
       puts "Here's the dealer's hand: #{computer_hand}"
       puts "........................."
-      if total(computer_hand) == 18..21
-        puts "Dealer chose to stay."
+      case 
+        when total(computer_hand) == (17..21)then puts "Dealer chose to stay."
         break 
-      elsif bust?(total(computer_hand))
+        when total(computer_hand) > 21 
         break 
-      else 
+        when total(computer_hand) < 21
           puts "Dealer chose to hit"
           deal_cards(computer_hand, 1)
           puts "Here's the dealer's hand: #{computer_hand}"
-      end 
+        end
     end 
   
     if bust?(total(computer_hand))
