@@ -1,0 +1,10 @@
+
+[1mFrom:[0m /home/ubuntu/workspace/programming_foundations/lesson_4/twentyone.rb @ line 28 :
+
+    [1;34m23[0m: player_hand = []
+    [1;34m24[0m: computer_hand = []
+    [1;34m25[0m: 
+    [1;34m26[0m: player_hand = [[1;34;4mDECK[0m.sample, [1;34;4mDECK[0m.sample]
+    [1;34m27[0m: 
+ => [1;34m28[0m: binding.pry
+
