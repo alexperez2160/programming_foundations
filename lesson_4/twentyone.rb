@@ -10,19 +10,21 @@
 
 require 'pry'
 
-DECK = [['H','A'], ['H', '2'], ['H', '3'], ['H', '4'], ['H', '5'], ['H', '6']]+
-       [['H', '7'], ['H', '8'], ['H', '9'], ['H', 'J'], ['H', 'Q'], ['H', 'K']]+
-       [['C','A'], ['C', '2'], ['C', '3'], ['C', '4'], ['C', '5'], ['C', '6']]+
-       [['C', '7'], ['C', '8'], ['C', '9'], ['C', 'J'], ['C', 'Q'], ['C', 'K']]+
-       [['S','A'], ['S', '2'], ['S', '3'], ['S', '4'], ['H', '5'], ['H', '6']]+
-       [['S', '7'], ['S', '8'], ['S', '9'], ['S', 'J'], ['H', 'Q'], ['H', 'K']]+
-       [['D','A'], ['D', '2'], ['D', '3'], ['D', '4'], ['D', '5'], ['D', '6']]+
-       [['D', '7'], ['D', '8'], ['D', '9'], ['D', 'J'], ['D', 'Q'], ['D', 'K']]
+SUITS = ['H', 'D', 'S', 'C']
+VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
-def deal_cards (arr, num, carddeck = DECK)
-  num.to_i.times do |i|
+def prompt(msg)
+  puts "=> #{msg}"
+end
+
+def initialize_deck
+  SUITS.product(VALUES).shuffle
+end
+
+def deal_cards(arr, num, carddeck)
+  num.to_i.times do
     arr << carddeck.sample
-    end
+  end
 end
 
 def total(cards)
@@ -48,8 +50,8 @@ def total(cards)
   sum
 end
 
-def bust?(sum)
-  if sum > 21 
+def bust?(cards)
+  if cards > 21
     true
   else
     false
@@ -61,93 +63,103 @@ def winner?(player_total, computer_total)
     return 'Player'
   elsif computer_total > player_total
     return 'Dealer'
-  else
-    nil
-  end 
-end 
+  end
+end
 
 def display_winner(winner)
   if winner == 'Player'
     puts "You won!!"
   elsif winner == 'Dealer'
     puts "The dealer won!"
-  else 
+  else
     puts "It's a tie"
-  end 
+  end
 end
+loop do
+  loop do
+    # initialize
+    puts "Let's play blackjack."
+    deck = initialize_deck
+    player_hand = []
+    computer_hand = []
 
-loop do 
-  #initialize
-  puts "Let's play blackjack."
-  player_hand = []
-  computer_hand = []
-  
-  #first dealing of cards
-  deal_cards(player_hand, 2)
-  deal_cards(computer_hand, 2)
-  
-  #player turn
-  puts "Here's your hand: #{player_hand}"
-  puts "Here's the dealer's hand: #{computer_hand[0]}"
-  
-  answer = nil
-    loop do 
-      puts "............"
-      puts "Hit or stay?"
-      answer = gets.chomp
-      if answer.downcase.start_with?('h') 
-        puts "You chose to hit."
-        deal_cards(player_hand, 1)
-        puts "................."
-        puts "Here's your hand: #{player_hand}"
-        puts "Here's the dealer's hand: #{computer_hand[0]}"
-        puts ".................."
-        if bust?(total(player_hand))
-           break 
-        else 
-           nil
-        end 
-      elsif answer.downcase.start_with?('s')
-          break
-      else
-        puts "Please enter a valid choice."
-      end 
-    end 
-    
-    if bust?(total(player_hand))
-      puts "You busted"
-      puts "You lose!"
-      break
-    else answer.downcase.start_with?('s')
-      puts "You chose to stay!"
-      "It's the dealer's turn then"
-    end 
-    
-  #computer turn 
-    puts "..........................."
+    # first dealing of cards
+    deal_cards(player_hand, 2, deck)
+    deal_cards(computer_hand, 2, deck)
+
+    # player turn
     puts "Here's your hand: #{player_hand}"
-    puts "The dealer now reveals both cards."
+    puts "Here's the dealer's hand: #{computer_hand[0]}"
 
-    loop do 
-      puts "Here's the dealer's hand: #{computer_hand}"
-      puts "........................."
-      if  (17..21) === total(computer_hand)
-        break
-      elsif
-        puts "Dealer chose to hit"
-        deal_cards(computer_hand, 1)
+    answer = nil
+      loop do
+        puts "............"
+        puts "Hit or stay?"
+        answer = gets.chomp
+        if answer.downcase.start_with?('h')
+          puts "You chose to hit."
+          deal_cards(player_hand, 1, deck)
+          puts "................."
+          puts "Here's your hand: #{player_hand}"
+          puts "Your current total is #{total(player_hand)}"
+          puts "Here's the dealer's hand: #{computer_hand[0]}"
+          puts ".................."
+          if bust?(total(player_hand))
+            break
+          end
+        elsif answer.downcase.start_with?('s')
+          break
+        else
+          puts "Please enter a valid choice."
+        end
       end
-    end 
-  
-    if bust?(total(computer_hand))
-      puts "Dealer busted"
-      puts "You won!"
-      break
-    else 
-      puts "Time to check who won!" 
-    end 
-  
-#results 
-  display_winner(winner?(total(player_hand), total(computer_hand)))
-  break
+
+      if bust?(total(player_hand))
+        puts "You busted"
+        puts "You lose!"
+        break
+      elsif answer.downcase.start_with?('s')
+        puts "You chose to stay!"
+        "It's the dealer's turn then"
+      end
+
+      # computer turn
+      puts "..........................."
+      puts "Here's your hand: #{player_hand}"
+      puts "The dealer now reveals both cards."
+
+      loop do
+        puts "Here's the dealer's hand: #{computer_hand}"
+        puts "The dealer's total is #{total(computer_hand)}"
+        puts "........................."
+        if total(computer_hand) >= 17 || total(computer_hand) == 21
+          break
+        elsif total(computer_hand) < 17
+          puts "Dealer chose to hit"
+          deal_cards(computer_hand, 1, deck)
+        end
+      end
+
+      if bust?(total(computer_hand))
+        puts "Dealer busted"
+        puts "You won!"
+        break
+      else
+        puts "Dealer chose to stay"
+        puts "Time to check who won!"
+      end
+
+    # results
+    prompt "You have a total of #{total(player_hand)}."
+    prompt "The dealer has a total of #{total(computer_hand)}"
+    display_winner(winner?(total(player_hand), total(computer_hand)))
+    break
+  end
+
+  prompt "Play again? (enter y or n)"
+  play_again_answer = gets.chomp
+  break if play_again_answer.downcase.start_with?('n')
+  prompt ".........."
 end
+
+prompt "Thanks for playing."
