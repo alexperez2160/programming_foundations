@@ -68,98 +68,139 @@ end
 
 def display_winner(winner)
   if winner == 'Player'
-    puts "You won!!"
+    prompt "You won!!"
   elsif winner == 'Dealer'
-    puts "The dealer won!"
+    prompt "The dealer won!"
   else
     puts "It's a tie"
   end
 end
+
+def play_again?
+  puts "-------------"
+  prompt "Do you want to play again? (y or n)"
+  answer = gets.chomp
+  answer.downcase.start_with?('y')
+end
+
+def display_score(player, dealer)
+  prompt "Dealer: #{dealer}, Player: #{player}"
+end
+
 loop do
+player_score = 0
+computer_score = 0
   loop do
-    # initialize
-    puts "Let's play blackjack."
-    deck = initialize_deck
-    player_hand = []
-    computer_hand = []
-
-    # first dealing of cards
-    deal_cards(player_hand, 2, deck)
-    deal_cards(computer_hand, 2, deck)
-
-    # player turn
-    puts "Here's your hand: #{player_hand}"
-    puts "Here's the dealer's hand: #{computer_hand[0]}"
-
-    answer = nil
-      loop do
-        puts "............"
-        puts "Hit or stay?"
-        answer = gets.chomp
-        if answer.downcase.start_with?('h')
-          puts "You chose to hit."
-          deal_cards(player_hand, 1, deck)
-          puts "................."
-          puts "Here's your hand: #{player_hand}"
-          puts "Your current total is #{total(player_hand)}"
-          puts "Here's the dealer's hand: #{computer_hand[0]}"
-          puts ".................."
-          if bust?(total(player_hand))
+    loop do 
+      # initialize
+      prompt "Let's play blackjack."
+      prompt "First one to reach 5 points wins!"
+      deck = initialize_deck
+      player_hand = []
+      computer_hand = []
+  
+      # first dealing of cards
+      deal_cards(player_hand, 2, deck)
+      deal_cards(computer_hand, 2, deck)
+  
+      # player turn
+      prompt "Here's your hand: #{player_hand}"
+      prompt "Your current total is #{total(player_hand)}"
+      prompt "...................."
+      prompt "Here's the dealer's hand: #{computer_hand[0]}"
+  
+      answer = nil
+        loop do
+          prompt "............"
+          prompt "Hit or stay?"
+          answer = gets.chomp
+          if answer.downcase.start_with?('h')
+            prompt "You chose to hit."
+            deal_cards(player_hand, 1, deck)
+            prompt "................."
+            prompt "Here's your hand: #{player_hand}"
+            prompt "Your current total is #{total(player_hand)}"
+            prompt "....................."
+            prompt "Here's the dealer's hand: #{computer_hand[0]}"
+            prompt ".................."
+            if bust?(total(player_hand))
+              break
+            end
+          elsif answer.downcase.start_with?('s')
             break
+          else
+            prompt "Please enter a valid choice."
           end
+        end
+  
+        if bust?(total(player_hand))
+          prompt "You busted"
+          prompt "You lose!"
+          computer_score += 1 
+          display_score(player_score, computer_score)
+          prompt "................."
+          break
         elsif answer.downcase.start_with?('s')
+          prompt "You chose to stay!"
+          prompt "It's the dealer's turn then"
+        end
+  
+        # computer turn
+        prompt "..........................."
+        prompt "Here's your hand: #{player_hand}"
+        prompt "The dealer now reveals both cards."
+  
+        loop do
+          prompt "Here's the dealer's hand: #{computer_hand}"
+          prompt "The dealer's total is #{total(computer_hand)}"
+          prompt "........................."
+          if total(computer_hand) >= 17 || total(computer_hand) == 21
+            break
+          elsif total(computer_hand) < 17
+            prompt "Dealer chose to hit"
+            deal_cards(computer_hand, 1, deck)
+          end
+        end
+  
+        if bust?(total(computer_hand))
+          prompt "Dealer busted"
+          prompt "You won!"
+          player_score += 1 
+          display_score(player_score, computer_score)
+          prompt "..........."
           break
         else
-          puts "Please enter a valid choice."
+          prompt "Dealer chose to stay"
+          prompt "Time to check who won!"
         end
+  
+      # results
+      prompt "You have a total of #{total(player_hand)}."
+      prompt "The dealer has a total of #{total(computer_hand)}"
+      display_winner(winner?(total(player_hand), total(computer_hand)))
+      if winner?(total(player_hand), total(computer_hand)) == 'Player'
+        player_score += 1 
+      elsif winner?(total(player_hand), total(computer_hand)) == 'Dealer'
+        computer_score += 1 
       end
+      display_score(player_score, computer_score)
+      prompt "..............."
 
-      if bust?(total(player_hand))
-        puts "You busted"
-        puts "You lose!"
-        break
-      elsif answer.downcase.start_with?('s')
-        puts "You chose to stay!"
-        "It's the dealer's turn then"
+      if computer_score == 5 || player_score == 5 
+        break 
       end
-
-      # computer turn
-      puts "..........................."
-      puts "Here's your hand: #{player_hand}"
-      puts "The dealer now reveals both cards."
-
-      loop do
-        puts "Here's the dealer's hand: #{computer_hand}"
-        puts "The dealer's total is #{total(computer_hand)}"
-        puts "........................."
-        if total(computer_hand) >= 17 || total(computer_hand) == 21
-          break
-        elsif total(computer_hand) < 17
-          puts "Dealer chose to hit"
-          deal_cards(computer_hand, 1, deck)
-        end
-      end
-
-      if bust?(total(computer_hand))
-        puts "Dealer busted"
-        puts "You won!"
-        break
-      else
-        puts "Dealer chose to stay"
-        puts "Time to check who won!"
-      end
-
-    # results
-    prompt "You have a total of #{total(player_hand)}."
-    prompt "The dealer has a total of #{total(computer_hand)}"
-    display_winner(winner?(total(player_hand), total(computer_hand)))
-    break
+    end
+    if computer_score > player_score && computer_score == 5
+      prompt "Dealer won"
+      break
+    elsif player_score > computer_score && player_score == 5
+      prompt "You won"
+    elsif player_score == 5 && computer_score == 5
+      prompt "It's a tie"
+    end 
   end
 
-  prompt "Play again? (enter y or n)"
-  play_again_answer = gets.chomp
-  break if play_again_answer.downcase.start_with?('n')
-  prompt ".........."
+  break unless play_again?
 end
 
 prompt "Thanks for playing."
